@@ -1,6 +1,6 @@
 Custom Compiler – Mini Language
 ---
-This project is an original object-oriented programming language built from scratch using C++, Flex, and Bison. It performs the full "Front-End" process of a compiler—reading, validating, and understanding code—and then uses an AST (Abstract Syntax Tree) to execute the logic as an interpreter
+This project is an original object-oriented programming language built from scratch using C, Flex, and Bison. It performs the full "Front-End" process of a compiler—reading, validating, and understanding code—and then uses an AST (Abstract Syntax Tree) to execute the logic as an interpreter
 
 Key Features
 - Custom Syntax: Includes unique keywords like verify (if), loop (while), and counted_steps (for).
@@ -15,4 +15,4 @@ Compile:
 
 Execute:
 
-                ./minilang test11.txt
+        ./minilang test11.txt
