@@ -1,0 +1,83 @@
+
+========================================
+Symbol Table: Global
+Parent Scope: None (Global)
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+Calculator          Class          class          Definition
+calc                Variable       Calculator     Value: Object of class Calculatorundefined
+compute             Function       int            Parameters: int a, int b
+flag                Variable       bool           Value: false
+globalBool          Variable       bool           Value: false
+globalFloat         Variable       float          Value: 6.28
+globalInt           Variable       int            Value: 150
+globalString        Variable       string         Value: "Global"
+isGreater           Function       bool           Parameters: int a, int b
+merge               Variable       bool           Value: true
+message             Variable       string         Value: "World"
+x                   Variable       int            Value: 25
+y                   Variable       int            Value: undefined
+
+========================================
+Symbol Table: Class_Calculator
+Parent Scope: Global
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+add                 Function       int            Parameters: int a, int b
+multiply            Function       int            Parameters: int a, int b
+name                Variable       string         Value: undefined
+result              Variable       int            Value: undefined
+vai                 Variable       bool           Value: undefined
+
+========================================
+Symbol Table: Method_add
+Parent Scope: Class_Calculator
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+a                   Variable       int            Value: undefined
+b                   Variable       int            Value: undefined
+sum                 Variable       int            Value: 0
+
+========================================
+Symbol Table: Method_multiply
+Parent Scope: Class_Calculator
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+a                   Variable       int            Value: undefined
+b                   Variable       int            Value: undefined
+
+========================================
+Symbol Table: Func_compute
+Parent Scope: Global
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+a                   Variable       int            Value: undefined
+b                   Variable       int            Value: undefined
+result              Variable       int            Value: 0
+
+========================================
+Symbol Table: Func_isGreater
+Parent Scope: Global
+========================================
+
+Identifiers:
+Name                Category       Type/Return    Details
+----------------------------------------------------------------------
+a                   Variable       int            Value: undefined
+b                   Variable       int            Value: undefined
+res                 Variable       bool           Value: false

@@ -1,0 +1,182 @@
+int globalInt <- 100;
+float globalFloat <- 3.14;
+string globalString <- "Global";
+bool globalBool <- true;
+
+int x;
+int y;
+bool flag;
+bool merge<-true;
+string message;
+
+class Calculator
+begin
+    public
+        int result;
+        string name;
+        bool vai;
+    
+    public
+        function int add(int a, int b)
+        begin
+            int sum <- 0;
+            vai<-true;
+            return sum;
+        end
+        
+        function int multiply(int a, int b)
+        begin
+            return a * b;
+        end
+end
+
+function int compute(int a, int b)
+begin
+    int result <- a + b;
+    return result;
+end
+
+function bool isGreater(int a, int b)
+begin
+    bool res <- a > b;
+    return res;
+end
+
+Calculator calc;
+
+begin
+    calc.value<-10;
+    Print("=== DEMO LIMBAJ PROGRAMARE ===");
+    
+    Print("--- Operatii Aritmetice ---");
+    x <- 100+10.4;
+    Print(x);
+    
+    x <- x + 5;
+    Print(z);
+    flag<-isGreater(3, flag);
+    
+    x <- x * 2;
+    Print(x);
+    
+    x <- x - 10;
+    Print(x);
+    
+    x <- x / 2;
+    Print(x);
+    
+    x <- x % 3;
+    Print(x);
+    
+    Print("--- Operatii Booleene ---");
+    flag <- true;
+    Print(flag);
+    
+    flag <- false;
+    Print(flag);
+    
+    flag <- true && false;
+    Print(flag);
+    
+    flag <- true || (5<10);
+    Print(flag);
+    
+    flag <- !false;
+    Print(flag);
+    
+    Print("--- Comparatii ---");
+    flag <- 10 > 5;
+    Print(flag);
+    
+    flag <- 10 < 5;
+    Print(flag);
+    
+    flag <- 10 == 10;
+    Print(flag);
+    
+    flag <- 10 != 5;
+    Print(flag);
+    
+    flag <- 10 >= 10;
+    Print(flag);
+    
+    flag <- 5 <= 10;
+    Print(flag);
+    
+    Print("--- Expresii Complexe ---");
+    flag <- (10 > 5) && (20 < 30);
+    Print(flag);
+    
+    flag <- (10 == 10) || (5 > 10);
+    Print(flag);
+    
+    flag <- !(10 < 5);
+    Print(flag);
+    
+    Print("--- Strings ---");
+    message <- "Hello";
+    Print(message);
+    
+    message <- "World";
+    Print(message);
+    
+    Print("--- Obiecte si Clase ---");
+    calc <- new Calculator();
+    
+    calc.result <- 42;
+    Print(calc.result);
+    
+    calc.name <- "MyCalculator";
+    Print(calc.name);
+    
+    Print("--- Apeluri Functii ---");
+    x <- compute(10, 20);
+    Print(x);
+    
+    flag <- isGreater(15, 10);
+    Print(flag);
+    
+    flag <- isGreater(5, 10);
+    Print(flag);
+    
+    Print("--- Metode Clase ---");
+    x <- calc.add(10, 20);
+    Print(x);
+    
+    x <- calc.multiply(5, 6);
+    Print(x);
+    
+    Print("--- Expresii Aritmetice Complexe ---");
+    x <- (10 + 5) * 2;
+    Print(x);
+    
+    x <- 100 / (10 - 5);
+    Print(x);
+    
+    x <- ((10 + 5) * 2) - (20 / 4);
+    Print(x);
+    
+    Print("--- Expresii Booleene Complexe ---");
+    flag <- ((10 + 5) > 10) && ((20 - 5) < 20);
+    Print(flag);
+    
+    flag <- ((5 * 2) == 10) || ((10 / 2) != 5);
+    Print(flag);
+    flag<-false;
+    
+    Print("--- Variabile Globale ---");
+    Print(globalInt);
+    Print(globalFloat);
+    Print(globalString);
+    Print(globalBool);
+    
+    globalInt <- globalInt + 50;
+    Print(globalInt);
+    
+    globalBool <- !globalBool;
+    Print(globalBool);
+    
+    globalFloat <- globalFloat * 2.0;
+    Print(globalFloat);
+    
+end

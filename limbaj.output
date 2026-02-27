@@ -1,0 +1,4093 @@
+Terminals unused in grammar
+
+    BOOL_VAL
+
+
+Grammar
+
+    0 $accept: progr $end
+
+    1 $@1: ε
+
+    2 $@2: ε
+
+    3 progr: $@1 global_definitions $@2 main_block
+
+    4 global_definitions: ε
+    5                   | global_definitions global_decl_var
+    6                   | global_definitions class_def
+    7                   | global_definitions func_def
+
+    8 global_decl_var: TYPE vars ';'
+    9                | ID ID ';'
+   10                | TYPE ID ASSIGN NR_INT ';'
+   11                | TYPE ID ASSIGN NR_FLOAT ';'
+   12                | TYPE ID ASSIGN STRING_VAL ';'
+   13                | TYPE ID ASSIGN TRUE ';'
+   14                | TYPE ID ASSIGN FALSE ';'
+
+   15 vars: ID
+   16     | vars ',' ID
+
+   17 $@3: ε
+
+   18 class_def: CLASS ID $@3 BGIN class_body END
+
+   19 class_body: ε
+   20           | class_body access_modifier class_members
+
+   21 access_modifier: PUBLIC
+   22                | PRIVATE
+   23                | PROTECTED
+
+   24 class_members: class_member_list
+
+   25 class_member_list: ε
+   26                  | class_member_list class_member
+
+   27 class_member: class_field
+   28             | class_method
+   29             | constructor_def
+
+   30 constructor_def: FUNCTION ID '(' ')' BGIN func_block END
+
+   31 class_field: TYPE vars ';'
+   32            | ID ID ';'
+
+   33 $@4: ε
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' $@4 BGIN func_block END
+
+   35 $@5: ε
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' $@5 BGIN func_block END
+
+   37 $@6: ε
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' $@6 BGIN func_block END
+
+   39 func_name: ID
+
+   40 func_block: ε
+   41           | func_block func_item
+
+   42 func_item: TYPE ID ';'
+   43          | TYPE ID ASSIGN ast_expr ';'
+   44          | control_stmt
+   45          | id_start_item ';'
+   46          | RETURN expr ';'
+   47          | RETURN expr_bool ';'
+
+   48 id_start_item: ID ID
+   49              | ID ID ASSIGN expr_bool
+   50              | ID ASSIGN expr_bool
+   51              | ID ASSIGN NEW ID '(' ')'
+   52              | ID '.' ID ASSIGN expr_bool
+   53              | ID '(' call_list ')'
+   54              | ID '.' ID '(' call_list ')'
+   55              | PRINT '(' expr ')'
+
+   56 list_param: ε
+   57           | param_list
+
+   58 param_list: param
+   59           | param_list ',' param
+
+   60 param: TYPE ID
+   61      | ID ID
+
+   62 $@7: ε
+
+   63 main_block: BGIN $@7 stmt_list_ast END
+
+   64 simple_stmt: ID ASSIGN expr_bool
+   65            | ID ASSIGN NEW ID '(' ')'
+   66            | ID '.' ID ASSIGN expr
+   67            | RETURN expr
+   68            | RETURN expr_bool
+   69            | PRINT '(' expr ')'
+   70            | ID '(' call_list ')'
+
+   71 control_stmt: IF '(' expr_bool ')' block_stmts
+   72             | IF '(' expr_bool ')' block_stmts ELSE block_stmts
+   73             | WHILE '(' expr_bool ')' block_stmts
+   74             | FOR '(' simple_stmt ';' expr_bool ';' simple_stmt ')' block_stmts
+
+   75 expr: '-' expr
+   76     | expr '+' expr
+   77     | expr '-' expr
+   78     | expr '*' expr
+   79     | expr '/' expr
+   80     | expr '%' expr
+   81     | '(' expr ')'
+   82     | NR_INT
+   83     | NR_FLOAT
+   84     | STRING_VAL
+   85     | ID
+   86     | ID '.' ID
+   87     | ID '.' ID '(' call_list ')'
+   88     | ID '(' call_list ')'
+
+   89 expr_bool: TRUE
+   90          | FALSE
+   91          | expr comp expr
+   92          | expr_bool AND expr_bool
+   93          | expr_bool OR expr_bool
+   94          | NOT expr_bool
+   95          | '(' expr_bool ')'
+
+   96 stmt_list_ast: ε
+   97              | stmt_list_ast statement_ast
+
+   98 statement_ast: ast_simple_stmt ';'
+   99              | control_stmt
+  100              | TYPE ID ASSIGN ast_expr ';'
+  101              | TYPE vars ';'
+
+  102 ast_simple_stmt: ID ASSIGN NEW ID '(' ')'
+  103                | ID ASSIGN ast_expr
+  104                | ID '.' ID ASSIGN ast_expr
+  105                | PRINT '(' ast_expr ')'
+  106                | RETURN ast_expr
+
+  107 ast_expr: NR_INT
+  108         | NR_FLOAT
+  109         | STRING_VAL
+  110         | TRUE
+  111         | FALSE
+  112         | ast_expr GT ast_expr
+  113         | ast_expr LT ast_expr
+  114         | ast_expr EQ ast_expr
+  115         | ast_expr NEQ ast_expr
+  116         | ast_expr GE ast_expr
+  117         | ast_expr LE ast_expr
+  118         | ID
+  119         | ID '.' ID '(' call_list_ast ')'
+  120         | ID '(' call_list_ast ')'
+  121         | ID '.' ID
+  122         | ast_expr '+' ast_expr
+  123         | ast_expr '-' ast_expr
+  124         | ast_expr '*' ast_expr
+  125         | ast_expr '/' ast_expr
+  126         | ast_expr '%' ast_expr
+  127         | '(' ast_expr ')'
+  128         | ast_expr AND ast_expr
+  129         | ast_expr OR ast_expr
+  130         | NOT ast_expr
+
+  131 comp: EQ
+  132     | LE
+  133     | GE
+  134     | GT
+  135     | LT
+  136     | NEQ
+
+  137 call_list: ε
+  138          | expr
+  139          | call_list ',' expr
+
+  140 call_list_ast: ε
+  141              | ast_expr
+  142              | call_list_ast ',' ast_expr
+
+  143 block_stmts: BGIN stmt_list_ast END
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '%' (37) 80 126
+    '(' (40) 30 34 36 38 51 53 54 55 65 69 70 71 72 73 74 81 87 88 95 102 105 119 120 127
+    ')' (41) 30 34 36 38 51 53 54 55 65 69 70 71 72 73 74 81 87 88 95 102 105 119 120 127
+    '*' (42) 78 124
+    '+' (43) 76 122
+    ',' (44) 16 59 139 142
+    '-' (45) 75 77 123
+    '.' (46) 52 54 66 86 87 104 119 121
+    '/' (47) 79 125
+    ';' (59) 8 9 10 11 12 13 14 31 32 42 43 45 46 47 74 98 100 101
+    error (256)
+    NEW (258) 51 65 102
+    NR_INT <Int> (259) 10 82 107
+    NR_FLOAT <Float> (260) 11 83 108
+    STRING_VAL <Str> (261) 12 84 109
+    ID <Id> (262) 9 10 11 12 13 14 15 16 18 30 32 38 39 42 43 48 49 50 51 52 53 54 60 61 64 65 66 70 85 86 87 88 100 102 103 104 118 119 120 121
+    TYPE <Id> (263) 8 10 11 12 13 14 31 34 36 42 43 60 100 101
+    BOOL_VAL <BoolVal> (264)
+    CLASS (265) 18
+    FUNCTION (266) 30 34 36 38
+    RETURN (267) 46 47 67 68 106
+    IF (268) 71 72
+    WHILE (269) 73
+    PRINT (270) 55 69 105
+    BGIN (271) 18 30 34 36 38 63 143
+    END (272) 18 30 34 36 38 63 143
+    PUBLIC (273) 21
+    PRIVATE (274) 22
+    PROTECTED (275) 23
+    FOR (276) 74
+    ELSE (277) 72
+    ASSIGN (278) 10 11 12 13 14 43 49 50 51 52 64 65 66 100 102 103 104
+    TRUE (279) 13 89 110
+    FALSE (280) 14 90 111
+    EQ (281) 114 131
+    NEQ (282) 115 136
+    LT (283) 113 135
+    GT (284) 112 134
+    LE (285) 117 132
+    GE (286) 116 133
+    OR (287) 93 129
+    AND (288) 92 128
+    NOT (289) 94 130
+    LOWER_THAN_ELSE (290)
+    UMINUS (291)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (47)
+        on left: 0
+    progr (48)
+        on left: 3
+        on right: 0
+    $@1 (49)
+        on left: 1
+        on right: 3
+    $@2 (50)
+        on left: 2
+        on right: 3
+    global_definitions (51)
+        on left: 4 5 6 7
+        on right: 3 5 6 7
+    global_decl_var (52)
+        on left: 8 9 10 11 12 13 14
+        on right: 5
+    vars <StrList> (53)
+        on left: 15 16
+        on right: 8 16 31 101
+    class_def (54)
+        on left: 18
+        on right: 6
+    $@3 (55)
+        on left: 17
+        on right: 18
+    class_body (56)
+        on left: 19 20
+        on right: 18 20
+    access_modifier (57)
+        on left: 21 22 23
+        on right: 20
+    class_members (58)
+        on left: 24
+        on right: 20
+    class_member_list (59)
+        on left: 25 26
+        on right: 24 26
+    class_member (60)
+        on left: 27 28 29
+        on right: 26
+    constructor_def (61)
+        on left: 30
+        on right: 29
+    class_field (62)
+        on left: 31 32
+        on right: 27
+    class_method (63)
+        on left: 34
+        on right: 28
+    $@4 (64)
+        on left: 33
+        on right: 34
+    func_def (65)
+        on left: 36 38
+        on right: 7
+    $@5 (66)
+        on left: 35
+        on right: 36
+    $@6 (67)
+        on left: 37
+        on right: 38
+    func_name <Id> (68)
+        on left: 39
+        on right: 34 36 38
+    func_block <TypeName> (69)
+        on left: 40 41
+        on right: 30 34 36 38 41
+    func_item <TypeName> (70)
+        on left: 42 43 44 45 46 47
+        on right: 41
+    id_start_item <TypeName> (71)
+        on left: 48 49 50 51 52 53 54 55
+        on right: 45
+    list_param <ParamList> (72)
+        on left: 56 57
+        on right: 34 36 38
+    param_list <ParamList> (73)
+        on left: 58 59
+        on right: 57 59
+    param <ParamList> (74)
+        on left: 60 61
+        on right: 58 59
+    main_block (75)
+        on left: 63
+        on right: 3
+    $@7 (76)
+        on left: 62
+        on right: 63
+    simple_stmt <TypeName> (77)
+        on left: 64 65 66 67 68 69 70
+        on right: 74
+    control_stmt (78)
+        on left: 71 72 73 74
+        on right: 44 99
+    expr <TypeName> (79)
+        on left: 75 76 77 78 79 80 81 82 83 84 85 86 87 88
+        on right: 46 55 66 67 69 75 76 77 78 79 80 81 91 138 139
+    expr_bool <TypeName> (80)
+        on left: 89 90 91 92 93 94 95
+        on right: 47 49 50 52 64 68 71 72 73 74 92 93 94 95
+    stmt_list_ast (81)
+        on left: 96 97
+        on right: 63 97 143
+    statement_ast (82)
+        on left: 98 99 100 101
+        on right: 97
+    ast_simple_stmt <astNode> (83)
+        on left: 102 103 104 105 106
+        on right: 98
+    ast_expr <astNode> (84)
+        on left: 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130
+        on right: 43 100 103 104 105 106 112 113 114 115 116 117 122 123 124 125 126 127 128 129 130 141 142
+    comp (85)
+        on left: 131 132 133 134 135 136
+        on right: 91
+    call_list <StrList> (86)
+        on left: 137 138 139
+        on right: 53 54 70 87 88 139
+    call_list_ast <AstList> (87)
+        on left: 140 141 142
+        on right: 119 120 142
+    block_stmts (88)
+        on left: 143
+        on right: 71 72 73 74
+
+
+State 0
+
+    0 $accept: • progr $end
+
+    $default  reduce using rule 1 ($@1)
+
+    progr  go to state 1
+    $@1    go to state 2
+
+
+State 1
+
+    0 $accept: progr • $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    3 progr: $@1 • global_definitions $@2 main_block
+
+    $default  reduce using rule 4 (global_definitions)
+
+    global_definitions  go to state 4
+
+
+State 3
+
+    0 $accept: progr $end •
+
+    $default  accept
+
+
+State 4
+
+    3 progr: $@1 global_definitions • $@2 main_block
+    5 global_definitions: global_definitions • global_decl_var
+    6                   | global_definitions • class_def
+    7                   | global_definitions • func_def
+
+    ID        shift, and go to state 5
+    TYPE      shift, and go to state 6
+    CLASS     shift, and go to state 7
+    FUNCTION  shift, and go to state 8
+
+    $default  reduce using rule 2 ($@2)
+
+    $@2              go to state 9
+    global_decl_var  go to state 10
+    class_def        go to state 11
+    func_def         go to state 12
+
+
+State 5
+
+    9 global_decl_var: ID • ID ';'
+
+    ID  shift, and go to state 13
+
+
+State 6
+
+    8 global_decl_var: TYPE • vars ';'
+   10                | TYPE • ID ASSIGN NR_INT ';'
+   11                | TYPE • ID ASSIGN NR_FLOAT ';'
+   12                | TYPE • ID ASSIGN STRING_VAL ';'
+   13                | TYPE • ID ASSIGN TRUE ';'
+   14                | TYPE • ID ASSIGN FALSE ';'
+
+    ID  shift, and go to state 14
+
+    vars  go to state 15
+
+
+State 7
+
+   18 class_def: CLASS • ID $@3 BGIN class_body END
+
+    ID  shift, and go to state 16
+
+
+State 8
+
+   36 func_def: FUNCTION • TYPE func_name '(' list_param ')' $@5 BGIN func_block END
+   38         | FUNCTION • ID func_name '(' list_param ')' $@6 BGIN func_block END
+
+    ID    shift, and go to state 17
+    TYPE  shift, and go to state 18
+
+
+State 9
+
+    3 progr: $@1 global_definitions $@2 • main_block
+
+    BGIN  shift, and go to state 19
+
+    main_block  go to state 20
+
+
+State 10
+
+    5 global_definitions: global_definitions global_decl_var •
+
+    $default  reduce using rule 5 (global_definitions)
+
+
+State 11
+
+    6 global_definitions: global_definitions class_def •
+
+    $default  reduce using rule 6 (global_definitions)
+
+
+State 12
+
+    7 global_definitions: global_definitions func_def •
+
+    $default  reduce using rule 7 (global_definitions)
+
+
+State 13
+
+    9 global_decl_var: ID ID • ';'
+
+    ';'  shift, and go to state 21
+
+
+State 14
+
+   10 global_decl_var: TYPE ID • ASSIGN NR_INT ';'
+   11                | TYPE ID • ASSIGN NR_FLOAT ';'
+   12                | TYPE ID • ASSIGN STRING_VAL ';'
+   13                | TYPE ID • ASSIGN TRUE ';'
+   14                | TYPE ID • ASSIGN FALSE ';'
+   15 vars: ID •
+
+    ASSIGN  shift, and go to state 22
+
+    $default  reduce using rule 15 (vars)
+
+
+State 15
+
+    8 global_decl_var: TYPE vars • ';'
+   16 vars: vars • ',' ID
+
+    ';'  shift, and go to state 23
+    ','  shift, and go to state 24
+
+
+State 16
+
+   18 class_def: CLASS ID • $@3 BGIN class_body END
+
+    $default  reduce using rule 17 ($@3)
+
+    $@3  go to state 25
+
+
+State 17
+
+   38 func_def: FUNCTION ID • func_name '(' list_param ')' $@6 BGIN func_block END
+
+    ID  shift, and go to state 26
+
+    func_name  go to state 27
+
+
+State 18
+
+   36 func_def: FUNCTION TYPE • func_name '(' list_param ')' $@5 BGIN func_block END
+
+    ID  shift, and go to state 26
+
+    func_name  go to state 28
+
+
+State 19
+
+   63 main_block: BGIN • $@7 stmt_list_ast END
+
+    $default  reduce using rule 62 ($@7)
+
+    $@7  go to state 29
+
+
+State 20
+
+    3 progr: $@1 global_definitions $@2 main_block •
+
+    $default  reduce using rule 3 (progr)
+
+
+State 21
+
+    9 global_decl_var: ID ID ';' •
+
+    $default  reduce using rule 9 (global_decl_var)
+
+
+State 22
+
+   10 global_decl_var: TYPE ID ASSIGN • NR_INT ';'
+   11                | TYPE ID ASSIGN • NR_FLOAT ';'
+   12                | TYPE ID ASSIGN • STRING_VAL ';'
+   13                | TYPE ID ASSIGN • TRUE ';'
+   14                | TYPE ID ASSIGN • FALSE ';'
+
+    NR_INT      shift, and go to state 30
+    NR_FLOAT    shift, and go to state 31
+    STRING_VAL  shift, and go to state 32
+    TRUE        shift, and go to state 33
+    FALSE       shift, and go to state 34
+
+
+State 23
+
+    8 global_decl_var: TYPE vars ';' •
+
+    $default  reduce using rule 8 (global_decl_var)
+
+
+State 24
+
+   16 vars: vars ',' • ID
+
+    ID  shift, and go to state 35
+
+
+State 25
+
+   18 class_def: CLASS ID $@3 • BGIN class_body END
+
+    BGIN  shift, and go to state 36
+
+
+State 26
+
+   39 func_name: ID •
+
+    $default  reduce using rule 39 (func_name)
+
+
+State 27
+
+   38 func_def: FUNCTION ID func_name • '(' list_param ')' $@6 BGIN func_block END
+
+    '('  shift, and go to state 37
+
+
+State 28
+
+   36 func_def: FUNCTION TYPE func_name • '(' list_param ')' $@5 BGIN func_block END
+
+    '('  shift, and go to state 38
+
+
+State 29
+
+   63 main_block: BGIN $@7 • stmt_list_ast END
+
+    $default  reduce using rule 96 (stmt_list_ast)
+
+    stmt_list_ast  go to state 39
+
+
+State 30
+
+   10 global_decl_var: TYPE ID ASSIGN NR_INT • ';'
+
+    ';'  shift, and go to state 40
+
+
+State 31
+
+   11 global_decl_var: TYPE ID ASSIGN NR_FLOAT • ';'
+
+    ';'  shift, and go to state 41
+
+
+State 32
+
+   12 global_decl_var: TYPE ID ASSIGN STRING_VAL • ';'
+
+    ';'  shift, and go to state 42
+
+
+State 33
+
+   13 global_decl_var: TYPE ID ASSIGN TRUE • ';'
+
+    ';'  shift, and go to state 43
+
+
+State 34
+
+   14 global_decl_var: TYPE ID ASSIGN FALSE • ';'
+
+    ';'  shift, and go to state 44
+
+
+State 35
+
+   16 vars: vars ',' ID •
+
+    $default  reduce using rule 16 (vars)
+
+
+State 36
+
+   18 class_def: CLASS ID $@3 BGIN • class_body END
+
+    $default  reduce using rule 19 (class_body)
+
+    class_body  go to state 45
+
+
+State 37
+
+   38 func_def: FUNCTION ID func_name '(' • list_param ')' $@6 BGIN func_block END
+
+    ID    shift, and go to state 46
+    TYPE  shift, and go to state 47
+
+    $default  reduce using rule 56 (list_param)
+
+    list_param  go to state 48
+    param_list  go to state 49
+    param       go to state 50
+
+
+State 38
+
+   36 func_def: FUNCTION TYPE func_name '(' • list_param ')' $@5 BGIN func_block END
+
+    ID    shift, and go to state 46
+    TYPE  shift, and go to state 47
+
+    $default  reduce using rule 56 (list_param)
+
+    list_param  go to state 51
+    param_list  go to state 49
+    param       go to state 50
+
+
+State 39
+
+   63 main_block: BGIN $@7 stmt_list_ast • END
+   97 stmt_list_ast: stmt_list_ast • statement_ast
+
+    ID      shift, and go to state 52
+    TYPE    shift, and go to state 53
+    RETURN  shift, and go to state 54
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 57
+    END     shift, and go to state 58
+    FOR     shift, and go to state 59
+
+    control_stmt     go to state 60
+    statement_ast    go to state 61
+    ast_simple_stmt  go to state 62
+
+
+State 40
+
+   10 global_decl_var: TYPE ID ASSIGN NR_INT ';' •
+
+    $default  reduce using rule 10 (global_decl_var)
+
+
+State 41
+
+   11 global_decl_var: TYPE ID ASSIGN NR_FLOAT ';' •
+
+    $default  reduce using rule 11 (global_decl_var)
+
+
+State 42
+
+   12 global_decl_var: TYPE ID ASSIGN STRING_VAL ';' •
+
+    $default  reduce using rule 12 (global_decl_var)
+
+
+State 43
+
+   13 global_decl_var: TYPE ID ASSIGN TRUE ';' •
+
+    $default  reduce using rule 13 (global_decl_var)
+
+
+State 44
+
+   14 global_decl_var: TYPE ID ASSIGN FALSE ';' •
+
+    $default  reduce using rule 14 (global_decl_var)
+
+
+State 45
+
+   18 class_def: CLASS ID $@3 BGIN class_body • END
+   20 class_body: class_body • access_modifier class_members
+
+    END        shift, and go to state 63
+    PUBLIC     shift, and go to state 64
+    PRIVATE    shift, and go to state 65
+    PROTECTED  shift, and go to state 66
+
+    access_modifier  go to state 67
+
+
+State 46
+
+   61 param: ID • ID
+
+    ID  shift, and go to state 68
+
+
+State 47
+
+   60 param: TYPE • ID
+
+    ID  shift, and go to state 69
+
+
+State 48
+
+   38 func_def: FUNCTION ID func_name '(' list_param • ')' $@6 BGIN func_block END
+
+    ')'  shift, and go to state 70
+
+
+State 49
+
+   57 list_param: param_list •
+   59 param_list: param_list • ',' param
+
+    ','  shift, and go to state 71
+
+    $default  reduce using rule 57 (list_param)
+
+
+State 50
+
+   58 param_list: param •
+
+    $default  reduce using rule 58 (param_list)
+
+
+State 51
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param • ')' $@5 BGIN func_block END
+
+    ')'  shift, and go to state 72
+
+
+State 52
+
+  102 ast_simple_stmt: ID • ASSIGN NEW ID '(' ')'
+  103                | ID • ASSIGN ast_expr
+  104                | ID • '.' ID ASSIGN ast_expr
+
+    ASSIGN  shift, and go to state 73
+    '.'     shift, and go to state 74
+
+
+State 53
+
+  100 statement_ast: TYPE • ID ASSIGN ast_expr ';'
+  101              | TYPE • vars ';'
+
+    ID  shift, and go to state 75
+
+    vars  go to state 76
+
+
+State 54
+
+  106 ast_simple_stmt: RETURN • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 85
+
+
+State 55
+
+   71 control_stmt: IF • '(' expr_bool ')' block_stmts
+   72             | IF • '(' expr_bool ')' block_stmts ELSE block_stmts
+
+    '('  shift, and go to state 86
+
+
+State 56
+
+   73 control_stmt: WHILE • '(' expr_bool ')' block_stmts
+
+    '('  shift, and go to state 87
+
+
+State 57
+
+  105 ast_simple_stmt: PRINT • '(' ast_expr ')'
+
+    '('  shift, and go to state 88
+
+
+State 58
+
+   63 main_block: BGIN $@7 stmt_list_ast END •
+
+    $default  reduce using rule 63 (main_block)
+
+
+State 59
+
+   74 control_stmt: FOR • '(' simple_stmt ';' expr_bool ';' simple_stmt ')' block_stmts
+
+    '('  shift, and go to state 89
+
+
+State 60
+
+   99 statement_ast: control_stmt •
+
+    $default  reduce using rule 99 (statement_ast)
+
+
+State 61
+
+   97 stmt_list_ast: stmt_list_ast statement_ast •
+
+    $default  reduce using rule 97 (stmt_list_ast)
+
+
+State 62
+
+   98 statement_ast: ast_simple_stmt • ';'
+
+    ';'  shift, and go to state 90
+
+
+State 63
+
+   18 class_def: CLASS ID $@3 BGIN class_body END •
+
+    $default  reduce using rule 18 (class_def)
+
+
+State 64
+
+   21 access_modifier: PUBLIC •
+
+    $default  reduce using rule 21 (access_modifier)
+
+
+State 65
+
+   22 access_modifier: PRIVATE •
+
+    $default  reduce using rule 22 (access_modifier)
+
+
+State 66
+
+   23 access_modifier: PROTECTED •
+
+    $default  reduce using rule 23 (access_modifier)
+
+
+State 67
+
+   20 class_body: class_body access_modifier • class_members
+
+    $default  reduce using rule 25 (class_member_list)
+
+    class_members      go to state 91
+    class_member_list  go to state 92
+
+
+State 68
+
+   61 param: ID ID •
+
+    $default  reduce using rule 61 (param)
+
+
+State 69
+
+   60 param: TYPE ID •
+
+    $default  reduce using rule 60 (param)
+
+
+State 70
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' • $@6 BGIN func_block END
+
+    $default  reduce using rule 37 ($@6)
+
+    $@6  go to state 93
+
+
+State 71
+
+   59 param_list: param_list ',' • param
+
+    ID    shift, and go to state 46
+    TYPE  shift, and go to state 47
+
+    param  go to state 94
+
+
+State 72
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' • $@5 BGIN func_block END
+
+    $default  reduce using rule 35 ($@5)
+
+    $@5  go to state 95
+
+
+State 73
+
+  102 ast_simple_stmt: ID ASSIGN • NEW ID '(' ')'
+  103                | ID ASSIGN • ast_expr
+
+    NEW         shift, and go to state 96
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 97
+
+
+State 74
+
+  104 ast_simple_stmt: ID '.' • ID ASSIGN ast_expr
+
+    ID  shift, and go to state 98
+
+
+State 75
+
+   15 vars: ID •
+  100 statement_ast: TYPE ID • ASSIGN ast_expr ';'
+
+    ASSIGN  shift, and go to state 99
+
+    $default  reduce using rule 15 (vars)
+
+
+State 76
+
+   16 vars: vars • ',' ID
+  101 statement_ast: TYPE vars • ';'
+
+    ';'  shift, and go to state 100
+    ','  shift, and go to state 24
+
+
+State 77
+
+  107 ast_expr: NR_INT •
+
+    $default  reduce using rule 107 (ast_expr)
+
+
+State 78
+
+  108 ast_expr: NR_FLOAT •
+
+    $default  reduce using rule 108 (ast_expr)
+
+
+State 79
+
+  109 ast_expr: STRING_VAL •
+
+    $default  reduce using rule 109 (ast_expr)
+
+
+State 80
+
+  118 ast_expr: ID •
+  119         | ID • '.' ID '(' call_list_ast ')'
+  120         | ID • '(' call_list_ast ')'
+  121         | ID • '.' ID
+
+    '.'  shift, and go to state 101
+    '('  shift, and go to state 102
+
+    $default  reduce using rule 118 (ast_expr)
+
+
+State 81
+
+  110 ast_expr: TRUE •
+
+    $default  reduce using rule 110 (ast_expr)
+
+
+State 82
+
+  111 ast_expr: FALSE •
+
+    $default  reduce using rule 111 (ast_expr)
+
+
+State 83
+
+  130 ast_expr: NOT • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 103
+
+
+State 84
+
+  127 ast_expr: '(' • ast_expr ')'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 104
+
+
+State 85
+
+  106 ast_simple_stmt: RETURN ast_expr •
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 106 (ast_simple_stmt)
+
+
+State 86
+
+   71 control_stmt: IF '(' • expr_bool ')' block_stmts
+   72             | IF '(' • expr_bool ')' block_stmts ELSE block_stmts
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 128
+
+
+State 87
+
+   73 control_stmt: WHILE '(' • expr_bool ')' block_stmts
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 129
+
+
+State 88
+
+  105 ast_simple_stmt: PRINT '(' • ast_expr ')'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 130
+
+
+State 89
+
+   74 control_stmt: FOR '(' • simple_stmt ';' expr_bool ';' simple_stmt ')' block_stmts
+
+    ID      shift, and go to state 131
+    RETURN  shift, and go to state 132
+    PRINT   shift, and go to state 133
+
+    simple_stmt  go to state 134
+
+
+State 90
+
+   98 statement_ast: ast_simple_stmt ';' •
+
+    $default  reduce using rule 98 (statement_ast)
+
+
+State 91
+
+   20 class_body: class_body access_modifier class_members •
+
+    $default  reduce using rule 20 (class_body)
+
+
+State 92
+
+   24 class_members: class_member_list •
+   26 class_member_list: class_member_list • class_member
+
+    ID        shift, and go to state 135
+    TYPE      shift, and go to state 136
+    FUNCTION  shift, and go to state 137
+
+    $default  reduce using rule 24 (class_members)
+
+    class_member     go to state 138
+    constructor_def  go to state 139
+    class_field      go to state 140
+    class_method     go to state 141
+
+
+State 93
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' $@6 • BGIN func_block END
+
+    BGIN  shift, and go to state 142
+
+
+State 94
+
+   59 param_list: param_list ',' param •
+
+    $default  reduce using rule 59 (param_list)
+
+
+State 95
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' $@5 • BGIN func_block END
+
+    BGIN  shift, and go to state 143
+
+
+State 96
+
+  102 ast_simple_stmt: ID ASSIGN NEW • ID '(' ')'
+
+    ID  shift, and go to state 144
+
+
+State 97
+
+  103 ast_simple_stmt: ID ASSIGN ast_expr •
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 103 (ast_simple_stmt)
+
+
+State 98
+
+  104 ast_simple_stmt: ID '.' ID • ASSIGN ast_expr
+
+    ASSIGN  shift, and go to state 145
+
+
+State 99
+
+  100 statement_ast: TYPE ID ASSIGN • ast_expr ';'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 146
+
+
+State 100
+
+  101 statement_ast: TYPE vars ';' •
+
+    $default  reduce using rule 101 (statement_ast)
+
+
+State 101
+
+  119 ast_expr: ID '.' • ID '(' call_list_ast ')'
+  121         | ID '.' • ID
+
+    ID  shift, and go to state 147
+
+
+State 102
+
+  120 ast_expr: ID '(' • call_list_ast ')'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    $default  reduce using rule 140 (call_list_ast)
+
+    ast_expr       go to state 148
+    call_list_ast  go to state 149
+
+
+State 103
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+  130         | NOT ast_expr •
+
+    $default  reduce using rule 130 (ast_expr)
+
+
+State 104
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  127         | '(' ast_expr • ')'
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+    ')'  shift, and go to state 150
+
+
+State 105
+
+  114 ast_expr: ast_expr EQ • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 151
+
+
+State 106
+
+  115 ast_expr: ast_expr NEQ • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 152
+
+
+State 107
+
+  113 ast_expr: ast_expr LT • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 153
+
+
+State 108
+
+  112 ast_expr: ast_expr GT • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 154
+
+
+State 109
+
+  117 ast_expr: ast_expr LE • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 155
+
+
+State 110
+
+  116 ast_expr: ast_expr GE • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 156
+
+
+State 111
+
+  129 ast_expr: ast_expr OR • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 157
+
+
+State 112
+
+  128 ast_expr: ast_expr AND • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 158
+
+
+State 113
+
+  122 ast_expr: ast_expr '+' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 159
+
+
+State 114
+
+  123 ast_expr: ast_expr '-' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 160
+
+
+State 115
+
+  124 ast_expr: ast_expr '*' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 161
+
+
+State 116
+
+  125 ast_expr: ast_expr '/' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 162
+
+
+State 117
+
+  126 ast_expr: ast_expr '%' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 163
+
+
+State 118
+
+   82 expr: NR_INT •
+
+    $default  reduce using rule 82 (expr)
+
+
+State 119
+
+   83 expr: NR_FLOAT •
+
+    $default  reduce using rule 83 (expr)
+
+
+State 120
+
+   84 expr: STRING_VAL •
+
+    $default  reduce using rule 84 (expr)
+
+
+State 121
+
+   85 expr: ID •
+   86     | ID • '.' ID
+   87     | ID • '.' ID '(' call_list ')'
+   88     | ID • '(' call_list ')'
+
+    '.'  shift, and go to state 164
+    '('  shift, and go to state 165
+
+    $default  reduce using rule 85 (expr)
+
+
+State 122
+
+   89 expr_bool: TRUE •
+
+    $default  reduce using rule 89 (expr_bool)
+
+
+State 123
+
+   90 expr_bool: FALSE •
+
+    $default  reduce using rule 90 (expr_bool)
+
+
+State 124
+
+   94 expr_bool: NOT • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 166
+
+
+State 125
+
+   75 expr: '-' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 168
+
+
+State 126
+
+   81 expr: '(' • expr ')'
+   95 expr_bool: '(' • expr_bool ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 169
+    expr_bool  go to state 170
+
+
+State 127
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   91 expr_bool: expr • comp expr
+
+    EQ   shift, and go to state 171
+    NEQ  shift, and go to state 172
+    LT   shift, and go to state 173
+    GT   shift, and go to state 174
+    LE   shift, and go to state 175
+    GE   shift, and go to state 176
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    comp  go to state 182
+
+
+State 128
+
+   71 control_stmt: IF '(' expr_bool • ')' block_stmts
+   72             | IF '(' expr_bool • ')' block_stmts ELSE block_stmts
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+    ')'  shift, and go to state 185
+
+
+State 129
+
+   73 control_stmt: WHILE '(' expr_bool • ')' block_stmts
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+    ')'  shift, and go to state 186
+
+
+State 130
+
+  105 ast_simple_stmt: PRINT '(' ast_expr • ')'
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+    ')'  shift, and go to state 187
+
+
+State 131
+
+   64 simple_stmt: ID • ASSIGN expr_bool
+   65            | ID • ASSIGN NEW ID '(' ')'
+   66            | ID • '.' ID ASSIGN expr
+   70            | ID • '(' call_list ')'
+
+    ASSIGN  shift, and go to state 188
+    '.'     shift, and go to state 189
+    '('     shift, and go to state 190
+
+
+State 132
+
+   67 simple_stmt: RETURN • expr
+   68            | RETURN • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 191
+    expr_bool  go to state 192
+
+
+State 133
+
+   69 simple_stmt: PRINT • '(' expr ')'
+
+    '('  shift, and go to state 193
+
+
+State 134
+
+   74 control_stmt: FOR '(' simple_stmt • ';' expr_bool ';' simple_stmt ')' block_stmts
+
+    ';'  shift, and go to state 194
+
+
+State 135
+
+   32 class_field: ID • ID ';'
+
+    ID  shift, and go to state 195
+
+
+State 136
+
+   31 class_field: TYPE • vars ';'
+
+    ID  shift, and go to state 196
+
+    vars  go to state 197
+
+
+State 137
+
+   30 constructor_def: FUNCTION • ID '(' ')' BGIN func_block END
+   34 class_method: FUNCTION • TYPE func_name '(' list_param ')' $@4 BGIN func_block END
+
+    ID    shift, and go to state 198
+    TYPE  shift, and go to state 199
+
+
+State 138
+
+   26 class_member_list: class_member_list class_member •
+
+    $default  reduce using rule 26 (class_member_list)
+
+
+State 139
+
+   29 class_member: constructor_def •
+
+    $default  reduce using rule 29 (class_member)
+
+
+State 140
+
+   27 class_member: class_field •
+
+    $default  reduce using rule 27 (class_member)
+
+
+State 141
+
+   28 class_member: class_method •
+
+    $default  reduce using rule 28 (class_member)
+
+
+State 142
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' $@6 BGIN • func_block END
+
+    $default  reduce using rule 40 (func_block)
+
+    func_block  go to state 200
+
+
+State 143
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' $@5 BGIN • func_block END
+
+    $default  reduce using rule 40 (func_block)
+
+    func_block  go to state 201
+
+
+State 144
+
+  102 ast_simple_stmt: ID ASSIGN NEW ID • '(' ')'
+
+    '('  shift, and go to state 202
+
+
+State 145
+
+  104 ast_simple_stmt: ID '.' ID ASSIGN • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 203
+
+
+State 146
+
+  100 statement_ast: TYPE ID ASSIGN ast_expr • ';'
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+    ';'  shift, and go to state 204
+
+
+State 147
+
+  119 ast_expr: ID '.' ID • '(' call_list_ast ')'
+  121         | ID '.' ID •
+
+    '('  shift, and go to state 205
+
+    $default  reduce using rule 121 (ast_expr)
+
+
+State 148
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+  141 call_list_ast: ast_expr •
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 141 (call_list_ast)
+
+
+State 149
+
+  120 ast_expr: ID '(' call_list_ast • ')'
+  142 call_list_ast: call_list_ast • ',' ast_expr
+
+    ','  shift, and go to state 206
+    ')'  shift, and go to state 207
+
+
+State 150
+
+  127 ast_expr: '(' ast_expr ')' •
+
+    $default  reduce using rule 127 (ast_expr)
+
+
+State 151
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  114         | ast_expr EQ ast_expr •
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 114 (ast_expr)
+
+
+State 152
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  115         | ast_expr NEQ ast_expr •
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 115 (ast_expr)
+
+
+State 153
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  113         | ast_expr LT ast_expr •
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 113 (ast_expr)
+
+
+State 154
+
+  112 ast_expr: ast_expr • GT ast_expr
+  112         | ast_expr GT ast_expr •
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 112 (ast_expr)
+
+
+State 155
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  117         | ast_expr LE ast_expr •
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 117 (ast_expr)
+
+
+State 156
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  116         | ast_expr GE ast_expr •
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 116 (ast_expr)
+
+
+State 157
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+  129         | ast_expr OR ast_expr •
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 129 (ast_expr)
+
+
+State 158
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  128         | ast_expr AND ast_expr •
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 128 (ast_expr)
+
+
+State 159
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  122         | ast_expr '+' ast_expr •
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 122 (ast_expr)
+
+
+State 160
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  123         | ast_expr '-' ast_expr •
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 123 (ast_expr)
+
+
+State 161
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  124         | ast_expr '*' ast_expr •
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    $default  reduce using rule 124 (ast_expr)
+
+
+State 162
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  125         | ast_expr '/' ast_expr •
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    $default  reduce using rule 125 (ast_expr)
+
+
+State 163
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  126         | ast_expr '%' ast_expr •
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    $default  reduce using rule 126 (ast_expr)
+
+
+State 164
+
+   86 expr: ID '.' • ID
+   87     | ID '.' • ID '(' call_list ')'
+
+    ID  shift, and go to state 208
+
+
+State 165
+
+   88 expr: ID '(' • call_list ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    $default  reduce using rule 137 (call_list)
+
+    expr       go to state 209
+    call_list  go to state 210
+
+
+State 166
+
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+   94          | NOT expr_bool •
+
+    $default  reduce using rule 94 (expr_bool)
+
+
+State 167
+
+   81 expr: '(' • expr ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 211
+
+
+State 168
+
+   75 expr: '-' expr •
+   76     | expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    $default  reduce using rule 75 (expr)
+
+
+State 169
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   81     | '(' expr • ')'
+   91 expr_bool: expr • comp expr
+
+    EQ   shift, and go to state 171
+    NEQ  shift, and go to state 172
+    LT   shift, and go to state 173
+    GT   shift, and go to state 174
+    LE   shift, and go to state 175
+    GE   shift, and go to state 176
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+    ')'  shift, and go to state 212
+
+    comp  go to state 182
+
+
+State 170
+
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+   95          | '(' expr_bool • ')'
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+    ')'  shift, and go to state 213
+
+
+State 171
+
+  131 comp: EQ •
+
+    $default  reduce using rule 131 (comp)
+
+
+State 172
+
+  136 comp: NEQ •
+
+    $default  reduce using rule 136 (comp)
+
+
+State 173
+
+  135 comp: LT •
+
+    $default  reduce using rule 135 (comp)
+
+
+State 174
+
+  134 comp: GT •
+
+    $default  reduce using rule 134 (comp)
+
+
+State 175
+
+  132 comp: LE •
+
+    $default  reduce using rule 132 (comp)
+
+
+State 176
+
+  133 comp: GE •
+
+    $default  reduce using rule 133 (comp)
+
+
+State 177
+
+   76 expr: expr '+' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 214
+
+
+State 178
+
+   77 expr: expr '-' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 215
+
+
+State 179
+
+   78 expr: expr '*' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 216
+
+
+State 180
+
+   79 expr: expr '/' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 217
+
+
+State 181
+
+   80 expr: expr '%' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 218
+
+
+State 182
+
+   91 expr_bool: expr comp • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 219
+
+
+State 183
+
+   93 expr_bool: expr_bool OR • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 220
+
+
+State 184
+
+   92 expr_bool: expr_bool AND • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 221
+
+
+State 185
+
+   71 control_stmt: IF '(' expr_bool ')' • block_stmts
+   72             | IF '(' expr_bool ')' • block_stmts ELSE block_stmts
+
+    BGIN  shift, and go to state 222
+
+    block_stmts  go to state 223
+
+
+State 186
+
+   73 control_stmt: WHILE '(' expr_bool ')' • block_stmts
+
+    BGIN  shift, and go to state 222
+
+    block_stmts  go to state 224
+
+
+State 187
+
+  105 ast_simple_stmt: PRINT '(' ast_expr ')' •
+
+    $default  reduce using rule 105 (ast_simple_stmt)
+
+
+State 188
+
+   64 simple_stmt: ID ASSIGN • expr_bool
+   65            | ID ASSIGN • NEW ID '(' ')'
+
+    NEW         shift, and go to state 225
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 226
+
+
+State 189
+
+   66 simple_stmt: ID '.' • ID ASSIGN expr
+
+    ID  shift, and go to state 227
+
+
+State 190
+
+   70 simple_stmt: ID '(' • call_list ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    $default  reduce using rule 137 (call_list)
+
+    expr       go to state 209
+    call_list  go to state 228
+
+
+State 191
+
+   67 simple_stmt: RETURN expr •
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   91 expr_bool: expr • comp expr
+
+    EQ   shift, and go to state 171
+    NEQ  shift, and go to state 172
+    LT   shift, and go to state 173
+    GT   shift, and go to state 174
+    LE   shift, and go to state 175
+    GE   shift, and go to state 176
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 67 (simple_stmt)
+
+    comp  go to state 182
+
+
+State 192
+
+   68 simple_stmt: RETURN expr_bool •
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 68 (simple_stmt)
+
+
+State 193
+
+   69 simple_stmt: PRINT '(' • expr ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 229
+
+
+State 194
+
+   74 control_stmt: FOR '(' simple_stmt ';' • expr_bool ';' simple_stmt ')' block_stmts
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 230
+
+
+State 195
+
+   32 class_field: ID ID • ';'
+
+    ';'  shift, and go to state 231
+
+
+State 196
+
+   15 vars: ID •
+
+    $default  reduce using rule 15 (vars)
+
+
+State 197
+
+   16 vars: vars • ',' ID
+   31 class_field: TYPE vars • ';'
+
+    ';'  shift, and go to state 232
+    ','  shift, and go to state 24
+
+
+State 198
+
+   30 constructor_def: FUNCTION ID • '(' ')' BGIN func_block END
+
+    '('  shift, and go to state 233
+
+
+State 199
+
+   34 class_method: FUNCTION TYPE • func_name '(' list_param ')' $@4 BGIN func_block END
+
+    ID  shift, and go to state 26
+
+    func_name  go to state 234
+
+
+State 200
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' $@6 BGIN func_block • END
+   41 func_block: func_block • func_item
+
+    ID      shift, and go to state 235
+    TYPE    shift, and go to state 236
+    RETURN  shift, and go to state 237
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 238
+    END     shift, and go to state 239
+    FOR     shift, and go to state 59
+
+    func_item      go to state 240
+    id_start_item  go to state 241
+    control_stmt   go to state 242
+
+
+State 201
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' $@5 BGIN func_block • END
+   41 func_block: func_block • func_item
+
+    ID      shift, and go to state 235
+    TYPE    shift, and go to state 236
+    RETURN  shift, and go to state 237
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 238
+    END     shift, and go to state 243
+    FOR     shift, and go to state 59
+
+    func_item      go to state 240
+    id_start_item  go to state 241
+    control_stmt   go to state 242
+
+
+State 202
+
+  102 ast_simple_stmt: ID ASSIGN NEW ID '(' • ')'
+
+    ')'  shift, and go to state 244
+
+
+State 203
+
+  104 ast_simple_stmt: ID '.' ID ASSIGN ast_expr •
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 104 (ast_simple_stmt)
+
+
+State 204
+
+  100 statement_ast: TYPE ID ASSIGN ast_expr ';' •
+
+    $default  reduce using rule 100 (statement_ast)
+
+
+State 205
+
+  119 ast_expr: ID '.' ID '(' • call_list_ast ')'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    $default  reduce using rule 140 (call_list_ast)
+
+    ast_expr       go to state 148
+    call_list_ast  go to state 245
+
+
+State 206
+
+  142 call_list_ast: call_list_ast ',' • ast_expr
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 246
+
+
+State 207
+
+  120 ast_expr: ID '(' call_list_ast ')' •
+
+    $default  reduce using rule 120 (ast_expr)
+
+
+State 208
+
+   86 expr: ID '.' ID •
+   87     | ID '.' ID • '(' call_list ')'
+
+    '('  shift, and go to state 247
+
+    $default  reduce using rule 86 (expr)
+
+
+State 209
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+  138 call_list: expr •
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 138 (call_list)
+
+
+State 210
+
+   88 expr: ID '(' call_list • ')'
+  139 call_list: call_list • ',' expr
+
+    ','  shift, and go to state 248
+    ')'  shift, and go to state 249
+
+
+State 211
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   81     | '(' expr • ')'
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+    ')'  shift, and go to state 212
+
+
+State 212
+
+   81 expr: '(' expr ')' •
+
+    $default  reduce using rule 81 (expr)
+
+
+State 213
+
+   95 expr_bool: '(' expr_bool ')' •
+
+    $default  reduce using rule 95 (expr_bool)
+
+
+State 214
+
+   76 expr: expr • '+' expr
+   76     | expr '+' expr •
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 76 (expr)
+
+
+State 215
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   77     | expr '-' expr •
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 77 (expr)
+
+
+State 216
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   78     | expr '*' expr •
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    $default  reduce using rule 78 (expr)
+
+
+State 217
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   79     | expr '/' expr •
+   80     | expr • '%' expr
+
+    $default  reduce using rule 79 (expr)
+
+
+State 218
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   80     | expr '%' expr •
+
+    $default  reduce using rule 80 (expr)
+
+
+State 219
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   91 expr_bool: expr comp expr •
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 91 (expr_bool)
+
+
+State 220
+
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+   93          | expr_bool OR expr_bool •
+
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 93 (expr_bool)
+
+
+State 221
+
+   92 expr_bool: expr_bool • AND expr_bool
+   92          | expr_bool AND expr_bool •
+   93          | expr_bool • OR expr_bool
+
+    $default  reduce using rule 92 (expr_bool)
+
+
+State 222
+
+  143 block_stmts: BGIN • stmt_list_ast END
+
+    $default  reduce using rule 96 (stmt_list_ast)
+
+    stmt_list_ast  go to state 250
+
+
+State 223
+
+   71 control_stmt: IF '(' expr_bool ')' block_stmts •
+   72             | IF '(' expr_bool ')' block_stmts • ELSE block_stmts
+
+    ELSE  shift, and go to state 251
+
+    $default  reduce using rule 71 (control_stmt)
+
+
+State 224
+
+   73 control_stmt: WHILE '(' expr_bool ')' block_stmts •
+
+    $default  reduce using rule 73 (control_stmt)
+
+
+State 225
+
+   65 simple_stmt: ID ASSIGN NEW • ID '(' ')'
+
+    ID  shift, and go to state 252
+
+
+State 226
+
+   64 simple_stmt: ID ASSIGN expr_bool •
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 64 (simple_stmt)
+
+
+State 227
+
+   66 simple_stmt: ID '.' ID • ASSIGN expr
+
+    ASSIGN  shift, and go to state 253
+
+
+State 228
+
+   70 simple_stmt: ID '(' call_list • ')'
+  139 call_list: call_list • ',' expr
+
+    ','  shift, and go to state 248
+    ')'  shift, and go to state 254
+
+
+State 229
+
+   69 simple_stmt: PRINT '(' expr • ')'
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+    ')'  shift, and go to state 255
+
+
+State 230
+
+   74 control_stmt: FOR '(' simple_stmt ';' expr_bool • ';' simple_stmt ')' block_stmts
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+    ';'  shift, and go to state 256
+
+
+State 231
+
+   32 class_field: ID ID ';' •
+
+    $default  reduce using rule 32 (class_field)
+
+
+State 232
+
+   31 class_field: TYPE vars ';' •
+
+    $default  reduce using rule 31 (class_field)
+
+
+State 233
+
+   30 constructor_def: FUNCTION ID '(' • ')' BGIN func_block END
+
+    ')'  shift, and go to state 257
+
+
+State 234
+
+   34 class_method: FUNCTION TYPE func_name • '(' list_param ')' $@4 BGIN func_block END
+
+    '('  shift, and go to state 258
+
+
+State 235
+
+   48 id_start_item: ID • ID
+   49              | ID • ID ASSIGN expr_bool
+   50              | ID • ASSIGN expr_bool
+   51              | ID • ASSIGN NEW ID '(' ')'
+   52              | ID • '.' ID ASSIGN expr_bool
+   53              | ID • '(' call_list ')'
+   54              | ID • '.' ID '(' call_list ')'
+
+    ID      shift, and go to state 259
+    ASSIGN  shift, and go to state 260
+    '.'     shift, and go to state 261
+    '('     shift, and go to state 262
+
+
+State 236
+
+   42 func_item: TYPE • ID ';'
+   43          | TYPE • ID ASSIGN ast_expr ';'
+
+    ID  shift, and go to state 263
+
+
+State 237
+
+   46 func_item: RETURN • expr ';'
+   47          | RETURN • expr_bool ';'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 264
+    expr_bool  go to state 265
+
+
+State 238
+
+   55 id_start_item: PRINT • '(' expr ')'
+
+    '('  shift, and go to state 266
+
+
+State 239
+
+   38 func_def: FUNCTION ID func_name '(' list_param ')' $@6 BGIN func_block END •
+
+    $default  reduce using rule 38 (func_def)
+
+
+State 240
+
+   41 func_block: func_block func_item •
+
+    $default  reduce using rule 41 (func_block)
+
+
+State 241
+
+   45 func_item: id_start_item • ';'
+
+    ';'  shift, and go to state 267
+
+
+State 242
+
+   44 func_item: control_stmt •
+
+    $default  reduce using rule 44 (func_item)
+
+
+State 243
+
+   36 func_def: FUNCTION TYPE func_name '(' list_param ')' $@5 BGIN func_block END •
+
+    $default  reduce using rule 36 (func_def)
+
+
+State 244
+
+  102 ast_simple_stmt: ID ASSIGN NEW ID '(' ')' •
+
+    $default  reduce using rule 102 (ast_simple_stmt)
+
+
+State 245
+
+  119 ast_expr: ID '.' ID '(' call_list_ast • ')'
+  142 call_list_ast: call_list_ast • ',' ast_expr
+
+    ','  shift, and go to state 206
+    ')'  shift, and go to state 268
+
+
+State 246
+
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+  142 call_list_ast: call_list_ast ',' ast_expr •
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+
+    $default  reduce using rule 142 (call_list_ast)
+
+
+State 247
+
+   87 expr: ID '.' ID '(' • call_list ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    $default  reduce using rule 137 (call_list)
+
+    expr       go to state 209
+    call_list  go to state 269
+
+
+State 248
+
+  139 call_list: call_list ',' • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 270
+
+
+State 249
+
+   88 expr: ID '(' call_list ')' •
+
+    $default  reduce using rule 88 (expr)
+
+
+State 250
+
+   97 stmt_list_ast: stmt_list_ast • statement_ast
+  143 block_stmts: BGIN stmt_list_ast • END
+
+    ID      shift, and go to state 52
+    TYPE    shift, and go to state 53
+    RETURN  shift, and go to state 54
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 57
+    END     shift, and go to state 271
+    FOR     shift, and go to state 59
+
+    control_stmt     go to state 60
+    statement_ast    go to state 61
+    ast_simple_stmt  go to state 62
+
+
+State 251
+
+   72 control_stmt: IF '(' expr_bool ')' block_stmts ELSE • block_stmts
+
+    BGIN  shift, and go to state 222
+
+    block_stmts  go to state 272
+
+
+State 252
+
+   65 simple_stmt: ID ASSIGN NEW ID • '(' ')'
+
+    '('  shift, and go to state 273
+
+
+State 253
+
+   66 simple_stmt: ID '.' ID ASSIGN • expr
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 274
+
+
+State 254
+
+   70 simple_stmt: ID '(' call_list ')' •
+
+    $default  reduce using rule 70 (simple_stmt)
+
+
+State 255
+
+   69 simple_stmt: PRINT '(' expr ')' •
+
+    $default  reduce using rule 69 (simple_stmt)
+
+
+State 256
+
+   74 control_stmt: FOR '(' simple_stmt ';' expr_bool ';' • simple_stmt ')' block_stmts
+
+    ID      shift, and go to state 131
+    RETURN  shift, and go to state 132
+    PRINT   shift, and go to state 133
+
+    simple_stmt  go to state 275
+
+
+State 257
+
+   30 constructor_def: FUNCTION ID '(' ')' • BGIN func_block END
+
+    BGIN  shift, and go to state 276
+
+
+State 258
+
+   34 class_method: FUNCTION TYPE func_name '(' • list_param ')' $@4 BGIN func_block END
+
+    ID    shift, and go to state 46
+    TYPE  shift, and go to state 47
+
+    $default  reduce using rule 56 (list_param)
+
+    list_param  go to state 277
+    param_list  go to state 49
+    param       go to state 50
+
+
+State 259
+
+   48 id_start_item: ID ID •
+   49              | ID ID • ASSIGN expr_bool
+
+    ASSIGN  shift, and go to state 278
+
+    $default  reduce using rule 48 (id_start_item)
+
+
+State 260
+
+   50 id_start_item: ID ASSIGN • expr_bool
+   51              | ID ASSIGN • NEW ID '(' ')'
+
+    NEW         shift, and go to state 279
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 280
+
+
+State 261
+
+   52 id_start_item: ID '.' • ID ASSIGN expr_bool
+   54              | ID '.' • ID '(' call_list ')'
+
+    ID  shift, and go to state 281
+
+
+State 262
+
+   53 id_start_item: ID '(' • call_list ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    $default  reduce using rule 137 (call_list)
+
+    expr       go to state 209
+    call_list  go to state 282
+
+
+State 263
+
+   42 func_item: TYPE ID • ';'
+   43          | TYPE ID • ASSIGN ast_expr ';'
+
+    ASSIGN  shift, and go to state 283
+    ';'     shift, and go to state 284
+
+
+State 264
+
+   46 func_item: RETURN expr • ';'
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+   91 expr_bool: expr • comp expr
+
+    EQ   shift, and go to state 171
+    NEQ  shift, and go to state 172
+    LT   shift, and go to state 173
+    GT   shift, and go to state 174
+    LE   shift, and go to state 175
+    GE   shift, and go to state 176
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+    ';'  shift, and go to state 285
+
+    comp  go to state 182
+
+
+State 265
+
+   47 func_item: RETURN expr_bool • ';'
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+    ';'  shift, and go to state 286
+
+
+State 266
+
+   55 id_start_item: PRINT '(' • expr ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    expr  go to state 287
+
+
+State 267
+
+   45 func_item: id_start_item ';' •
+
+    $default  reduce using rule 45 (func_item)
+
+
+State 268
+
+  119 ast_expr: ID '.' ID '(' call_list_ast ')' •
+
+    $default  reduce using rule 119 (ast_expr)
+
+
+State 269
+
+   87 expr: ID '.' ID '(' call_list • ')'
+  139 call_list: call_list • ',' expr
+
+    ','  shift, and go to state 248
+    ')'  shift, and go to state 288
+
+
+State 270
+
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+  139 call_list: call_list ',' expr •
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 139 (call_list)
+
+
+State 271
+
+  143 block_stmts: BGIN stmt_list_ast END •
+
+    $default  reduce using rule 143 (block_stmts)
+
+
+State 272
+
+   72 control_stmt: IF '(' expr_bool ')' block_stmts ELSE block_stmts •
+
+    $default  reduce using rule 72 (control_stmt)
+
+
+State 273
+
+   65 simple_stmt: ID ASSIGN NEW ID '(' • ')'
+
+    ')'  shift, and go to state 289
+
+
+State 274
+
+   66 simple_stmt: ID '.' ID ASSIGN expr •
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+
+    $default  reduce using rule 66 (simple_stmt)
+
+
+State 275
+
+   74 control_stmt: FOR '(' simple_stmt ';' expr_bool ';' simple_stmt • ')' block_stmts
+
+    ')'  shift, and go to state 290
+
+
+State 276
+
+   30 constructor_def: FUNCTION ID '(' ')' BGIN • func_block END
+
+    $default  reduce using rule 40 (func_block)
+
+    func_block  go to state 291
+
+
+State 277
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param • ')' $@4 BGIN func_block END
+
+    ')'  shift, and go to state 292
+
+
+State 278
+
+   49 id_start_item: ID ID ASSIGN • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 293
+
+
+State 279
+
+   51 id_start_item: ID ASSIGN NEW • ID '(' ')'
+
+    ID  shift, and go to state 294
+
+
+State 280
+
+   50 id_start_item: ID ASSIGN expr_bool •
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 50 (id_start_item)
+
+
+State 281
+
+   52 id_start_item: ID '.' ID • ASSIGN expr_bool
+   54              | ID '.' ID • '(' call_list ')'
+
+    ASSIGN  shift, and go to state 295
+    '('     shift, and go to state 296
+
+
+State 282
+
+   53 id_start_item: ID '(' call_list • ')'
+  139 call_list: call_list • ',' expr
+
+    ','  shift, and go to state 248
+    ')'  shift, and go to state 297
+
+
+State 283
+
+   43 func_item: TYPE ID ASSIGN • ast_expr ';'
+
+    NR_INT      shift, and go to state 77
+    NR_FLOAT    shift, and go to state 78
+    STRING_VAL  shift, and go to state 79
+    ID          shift, and go to state 80
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    NOT         shift, and go to state 83
+    '('         shift, and go to state 84
+
+    ast_expr  go to state 298
+
+
+State 284
+
+   42 func_item: TYPE ID ';' •
+
+    $default  reduce using rule 42 (func_item)
+
+
+State 285
+
+   46 func_item: RETURN expr ';' •
+
+    $default  reduce using rule 46 (func_item)
+
+
+State 286
+
+   47 func_item: RETURN expr_bool ';' •
+
+    $default  reduce using rule 47 (func_item)
+
+
+State 287
+
+   55 id_start_item: PRINT '(' expr • ')'
+   76 expr: expr • '+' expr
+   77     | expr • '-' expr
+   78     | expr • '*' expr
+   79     | expr • '/' expr
+   80     | expr • '%' expr
+
+    '+'  shift, and go to state 177
+    '-'  shift, and go to state 178
+    '*'  shift, and go to state 179
+    '/'  shift, and go to state 180
+    '%'  shift, and go to state 181
+    ')'  shift, and go to state 299
+
+
+State 288
+
+   87 expr: ID '.' ID '(' call_list ')' •
+
+    $default  reduce using rule 87 (expr)
+
+
+State 289
+
+   65 simple_stmt: ID ASSIGN NEW ID '(' ')' •
+
+    $default  reduce using rule 65 (simple_stmt)
+
+
+State 290
+
+   74 control_stmt: FOR '(' simple_stmt ';' expr_bool ';' simple_stmt ')' • block_stmts
+
+    BGIN  shift, and go to state 222
+
+    block_stmts  go to state 300
+
+
+State 291
+
+   30 constructor_def: FUNCTION ID '(' ')' BGIN func_block • END
+   41 func_block: func_block • func_item
+
+    ID      shift, and go to state 235
+    TYPE    shift, and go to state 236
+    RETURN  shift, and go to state 237
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 238
+    END     shift, and go to state 301
+    FOR     shift, and go to state 59
+
+    func_item      go to state 240
+    id_start_item  go to state 241
+    control_stmt   go to state 242
+
+
+State 292
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' • $@4 BGIN func_block END
+
+    $default  reduce using rule 33 ($@4)
+
+    $@4  go to state 302
+
+
+State 293
+
+   49 id_start_item: ID ID ASSIGN expr_bool •
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 49 (id_start_item)
+
+
+State 294
+
+   51 id_start_item: ID ASSIGN NEW ID • '(' ')'
+
+    '('  shift, and go to state 303
+
+
+State 295
+
+   52 id_start_item: ID '.' ID ASSIGN • expr_bool
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    TRUE        shift, and go to state 122
+    FALSE       shift, and go to state 123
+    NOT         shift, and go to state 124
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 126
+
+    expr       go to state 127
+    expr_bool  go to state 304
+
+
+State 296
+
+   54 id_start_item: ID '.' ID '(' • call_list ')'
+
+    NR_INT      shift, and go to state 118
+    NR_FLOAT    shift, and go to state 119
+    STRING_VAL  shift, and go to state 120
+    ID          shift, and go to state 121
+    '-'         shift, and go to state 125
+    '('         shift, and go to state 167
+
+    $default  reduce using rule 137 (call_list)
+
+    expr       go to state 209
+    call_list  go to state 305
+
+
+State 297
+
+   53 id_start_item: ID '(' call_list ')' •
+
+    $default  reduce using rule 53 (id_start_item)
+
+
+State 298
+
+   43 func_item: TYPE ID ASSIGN ast_expr • ';'
+  112 ast_expr: ast_expr • GT ast_expr
+  113         | ast_expr • LT ast_expr
+  114         | ast_expr • EQ ast_expr
+  115         | ast_expr • NEQ ast_expr
+  116         | ast_expr • GE ast_expr
+  117         | ast_expr • LE ast_expr
+  122         | ast_expr • '+' ast_expr
+  123         | ast_expr • '-' ast_expr
+  124         | ast_expr • '*' ast_expr
+  125         | ast_expr • '/' ast_expr
+  126         | ast_expr • '%' ast_expr
+  128         | ast_expr • AND ast_expr
+  129         | ast_expr • OR ast_expr
+
+    EQ   shift, and go to state 105
+    NEQ  shift, and go to state 106
+    LT   shift, and go to state 107
+    GT   shift, and go to state 108
+    LE   shift, and go to state 109
+    GE   shift, and go to state 110
+    OR   shift, and go to state 111
+    AND  shift, and go to state 112
+    '+'  shift, and go to state 113
+    '-'  shift, and go to state 114
+    '*'  shift, and go to state 115
+    '/'  shift, and go to state 116
+    '%'  shift, and go to state 117
+    ';'  shift, and go to state 306
+
+
+State 299
+
+   55 id_start_item: PRINT '(' expr ')' •
+
+    $default  reduce using rule 55 (id_start_item)
+
+
+State 300
+
+   74 control_stmt: FOR '(' simple_stmt ';' expr_bool ';' simple_stmt ')' block_stmts •
+
+    $default  reduce using rule 74 (control_stmt)
+
+
+State 301
+
+   30 constructor_def: FUNCTION ID '(' ')' BGIN func_block END •
+
+    $default  reduce using rule 30 (constructor_def)
+
+
+State 302
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' $@4 • BGIN func_block END
+
+    BGIN  shift, and go to state 307
+
+
+State 303
+
+   51 id_start_item: ID ASSIGN NEW ID '(' • ')'
+
+    ')'  shift, and go to state 308
+
+
+State 304
+
+   52 id_start_item: ID '.' ID ASSIGN expr_bool •
+   92 expr_bool: expr_bool • AND expr_bool
+   93          | expr_bool • OR expr_bool
+
+    OR   shift, and go to state 183
+    AND  shift, and go to state 184
+
+    $default  reduce using rule 52 (id_start_item)
+
+
+State 305
+
+   54 id_start_item: ID '.' ID '(' call_list • ')'
+  139 call_list: call_list • ',' expr
+
+    ','  shift, and go to state 248
+    ')'  shift, and go to state 309
+
+
+State 306
+
+   43 func_item: TYPE ID ASSIGN ast_expr ';' •
+
+    $default  reduce using rule 43 (func_item)
+
+
+State 307
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' $@4 BGIN • func_block END
+
+    $default  reduce using rule 40 (func_block)
+
+    func_block  go to state 310
+
+
+State 308
+
+   51 id_start_item: ID ASSIGN NEW ID '(' ')' •
+
+    $default  reduce using rule 51 (id_start_item)
+
+
+State 309
+
+   54 id_start_item: ID '.' ID '(' call_list ')' •
+
+    $default  reduce using rule 54 (id_start_item)
+
+
+State 310
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' $@4 BGIN func_block • END
+   41 func_block: func_block • func_item
+
+    ID      shift, and go to state 235
+    TYPE    shift, and go to state 236
+    RETURN  shift, and go to state 237
+    IF      shift, and go to state 55
+    WHILE   shift, and go to state 56
+    PRINT   shift, and go to state 238
+    END     shift, and go to state 311
+    FOR     shift, and go to state 59
+
+    func_item      go to state 240
+    id_start_item  go to state 241
+    control_stmt   go to state 242
+
+
+State 311
+
+   34 class_method: FUNCTION TYPE func_name '(' list_param ')' $@4 BGIN func_block END •
+
+    $default  reduce using rule 34 (class_method)
